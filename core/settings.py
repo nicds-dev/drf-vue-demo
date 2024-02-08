@@ -33,7 +33,7 @@ BASE_APPS = [
 THIRD_APPS = [
     'rest_framework',
     'corsheaders',
-
+    'django_filters',
 ]
 
 OWN_APPS = [
@@ -60,14 +60,18 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8080',
 ]
 
-CORS_ALLOWED_METHODS = [
+CORS_ALLOWED_METHODS = (
     'GET',
     'OPTIONS',
     'POST',
     'PUT',
     'PATCH',
     'DELETE',
-]
+)
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+}
 
 ROOT_URLCONF = 'core.urls'
 

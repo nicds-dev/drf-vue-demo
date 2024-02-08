@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <NavBar />
-    <Navigation />
+    <Navigation v-if="$route.path === '/about'" />
     <router-view/>
     <Footer />
   </div>

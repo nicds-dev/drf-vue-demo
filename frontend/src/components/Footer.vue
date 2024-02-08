@@ -1,5 +1,5 @@
 <template>
-    <footer class="text-center py-4 my-4 border-top">
+    <footer class="text-center pt-4 mt-4 border-top">
         <p>&copy; Copyright 2024</p>
     </footer>
 </template>
