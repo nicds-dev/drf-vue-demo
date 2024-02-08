@@ -1,19 +1,20 @@
-from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from products.models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 
-class ProductList(generics.ListCreateAPIView):
+class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    @action(detail=False)
+    def by_category(self, request):
+        category = self.request.query_params.get('category', None)
+        queryset = Product.objects.filter(category=category)
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
 
-class CategoryList(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
