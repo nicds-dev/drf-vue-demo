@@ -1,8 +1,12 @@
 <template>
   <NavBar @getSearchText="search" />
   <Navigation @getCatId="catId" />
-  <div v-if="catReceived">
+  <div v-if="catReceived" class="text-center mb-3">
     <h3>{{ catReceived }} Products</h3>
+  </div>
+  <div v-if="products.length === 0" class="alert alert-warning text-center" role="alert">
+    <span v-if="textSearchRule">No products found with the name '<strong>{{ textSearchRule }}</strong>'.</span>
+    <span v-else>No products available.</span>
   </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div v-for="product in products" :key="product.id" class="col">
@@ -42,12 +46,14 @@
   };
 
   const search = (textSearch) => {
+    catReceived.value = null
     textSearchRule.value = textSearch;
     const url = textSearch ? `http://127.0.0.1:8000/api/products/?search=${textSearch}` : 'http://127.0.0.1:8000/api/products/';
     fetchData(url);
   };
 
   const catId = (catId, catName) => {
+    textSearchRule.value = null
     catReceived.value = catName;
     const url = catId ? `http://127.0.0.1:8000/api/products/?category=${catId}` : 'http://127.0.0.1:8000/api/products/';
     fetchData(url);
