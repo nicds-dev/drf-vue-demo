@@ -17,17 +17,23 @@
                         <router-link to="/about" class="nav-link">About</router-link>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                <form class="d-flex" role="search" @submit.prevent="submitForm">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="searchText">
+                    <button class="btn btn-outline-success" type="submit" @click="getSearch" >Search</button>
                 </form>
             </div>
         </div>
     </nav>
 </template>
 
-<script>
-export default {
-    name: 'NavBar'
-}
+<script setup>
+    import { ref, defineEmits } from 'vue'
+
+    const searchText = ref('')
+    const emmitSearch = defineEmits(['getSearchText'])
+
+    const getSearch = () => {
+        emmitSearch('getSearchText', searchText.value)
+    }
+
 </script>

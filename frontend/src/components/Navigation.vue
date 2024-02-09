@@ -12,29 +12,25 @@
     </section>
 </template>
 
-<script>
-import axios from 'axios'
+<script setup>
+    import axios from 'axios'
+    import { ref, defineEmits, onMounted } from 'vue'
 
-export default {
-    name: 'Navigation',
-    data() {
-        return {
-            categories: [],
-        }
-    },
-    methods: {
-        getCatId(catId, catName) {
-            this.$emit('getCatId', catId, catName)
-        }
-    },
-    mounted() {
+    const categories = ref([])
+
+    const emit = defineEmits(['getCatId'])
+
+    const getCatId = (catId, catName) => {
+        emit('getCatId', catId, catName)
+    }
+    
+    onMounted(() => {
         axios.get('http://127.0.0.1:8000/api/categories/')
         .then((response) => {
-            this.categories = response.data
+            categories.value = response.data
         })
         .catch((error) => {
             console.log(error);
         })
-    }
-}
+    })
 </script>

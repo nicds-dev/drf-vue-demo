@@ -1,4 +1,5 @@
 <template>
+  <NavBar @getSearchText="search" />
   <Navigation @getCatId="catId" />
   <div v-if="catReceived">
     <h3>{{ catReceived }} Products</h3>
@@ -20,55 +21,42 @@
     </div>
 </template>
 
-<script>
-import axios from 'axios'
-import Navigation from '@/components/Navigation.vue'
+<script setup>
+  import axios from 'axios'
+  import Navigation from '@/components/Navigation.vue'
+  import NavBar from '@/components/NavBar.vue'
+  import { ref, onMounted } from 'vue'
 
-export default {
-  name: 'HomeView',
-  components: {
-    Navigation,
-  },
-  data() {
-    return {
-      products: [],
-      catReceived: null
-    }
-  },
-  methods: {
-    catId(catId, catName) {
-      this.catReceived = catName
-      if (catId) {
-        axios.get(`http://127.0.0.1:8000/api/products/?category=${catId}`)
-        .then((response) => {
-          this.products = response.data
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      } else {
-        axios.get('http://127.0.0.1:8000/api/products/')
-        .then((response) => {
-          this.products = response.data
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-      }
-    }
-  },
-  mounted() {
-    axios.get('http://127.0.0.1:8000/api/products/')
-    .then((response) => {
-      this.products = response.data
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  }
-}
+  const products = ref([])
+  const catReceived = ref(null)
+  const textSearchRule = ref(null)
+
+  const fetchData = (url) => {
+    axios.get(url)
+      .then((response) => {
+        products.value = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const search = (textSearch) => {
+    textSearchRule.value = textSearch;
+    const url = textSearch ? `http://127.0.0.1:8000/api/products/?search=${textSearch}` : 'http://127.0.0.1:8000/api/products/';
+    fetchData(url);
+  };
+
+  const catId = (catId, catName) => {
+    catReceived.value = catName;
+    const url = catId ? `http://127.0.0.1:8000/api/products/?category=${catId}` : 'http://127.0.0.1:8000/api/products/';
+    fetchData(url);
+  };
+
+  onMounted(() => {
+    fetchData('http://127.0.0.1:8000/api/products/');
+  });
 </script>
 
 <style scoped>
-
 </style>

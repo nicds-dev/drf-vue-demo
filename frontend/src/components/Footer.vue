@@ -4,8 +4,5 @@
     </footer>
 </template>
 
-<script>
-export default {
-    name: 'Footer'
-}
+<script setup>
 </script>

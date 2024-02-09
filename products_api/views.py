@@ -8,9 +8,17 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        # Filter by category
         category = self.request.query_params.get('category', None)
         if category is not None:
             queryset = queryset.filter(category=category)
+
+        # Filter by name
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            queryset = queryset.filter(name__icontains=search) | queryset.filter(description__icontains=search)
+        
         return queryset
 
 class CategoryViewSet(viewsets.ModelViewSet):
