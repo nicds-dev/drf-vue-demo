@@ -1,10 +1,8 @@
 <template>
-  <div class="container">
-    <NavBar v-if="$route.path != '/'" />
-    <Navigation v-if="$route.path === '/about'" />
-    <router-view/>
-    <Footer />
-  </div>
+  <NavBar v-if="$route.path != '/'" />
+  <Navigation v-if="$route.path === '/about'" />
+  <router-view/>
+  <Footer />
 </template>
 
 <script setup>
